@@ -1,0 +1,4 @@
+CREATE TABLE IF NOT EXISTS sales (
+    id SERIAL PRIMARY KEY,
+    sale_price NUMERIC(10,2) NOT NULL
+)
