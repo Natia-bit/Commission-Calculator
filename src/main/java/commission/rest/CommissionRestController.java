@@ -16,20 +16,24 @@ public class CommissionRestController {
         this.saleService = saleService;
     }
 
-    @GetMapping("/test")
-    public String sayHello(){
-        return "Hello";
-    }
-
     @GetMapping("/sales")
     public List<Sale> getSales(){
         return saleService.findAll();
     }
 
-
-
     @PostMapping("/sales")
     public void createSale(@RequestBody Sale sale){
         saleService.insertSale(sale);
+    }
+
+
+    @GetMapping("/sales/{id}")
+    public void findSaleById(@PathVariable long id){
+        saleService.findSaleById(id);
+    }
+
+    @DeleteMapping("/sales/{id}")
+    public void deleteSale(@PathVariable long id){
+        saleService.deleteSale(id);
     }
 }

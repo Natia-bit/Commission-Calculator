@@ -11,9 +11,10 @@ public interface SaleDao {
 
 
     void insertSale(Sale sale);
+    Sale findSaleById(long id);
+    void deleteSale(long id);
 
 
-//    boolean deleteSale(int id);
 
 
 }
