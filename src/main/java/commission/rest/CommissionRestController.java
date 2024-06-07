@@ -10,7 +10,6 @@ import java.util.List;
 @RequestMapping("/api")
 public class CommissionRestController {
 
-
     private final SaleServiceImpl saleService;
 
     public CommissionRestController(SaleServiceImpl saleService) {
@@ -28,8 +27,9 @@ public class CommissionRestController {
     }
 
 
+
     @PostMapping("/sales")
-    public void addSale(@RequestBody Sale sale){
-        saleService.addSale(sale);
+    public void createSale(@RequestBody Sale sale){
+        saleService.insertSale(sale);
     }
 }

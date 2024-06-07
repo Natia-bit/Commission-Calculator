@@ -22,8 +22,8 @@ public class SaleServiceImpl implements SalesService{
         return saleDao.findAll();
     }
     @Override
-    public void addSale(Sale sale){
-        saleDao.addSale(sale);
+    public void insertSale(Sale sale){
+        saleDao.insertSale(sale);
     }
 
 }

@@ -24,9 +24,12 @@ public class SaleDaoImpl implements SaleDao{
         return jdbcTemplate.query(query, new SalesRowMapper());
     }
 
+
     @Override
-    public int addSale(Sale sale) {
-        String query = "INSERT INTO sales(sale_price) values(?)";
-        return jdbcTemplate.update(query, sale.transaction());
+    public void insertSale(Sale sale) {
+        String query = "insert into sales(price) values (?);";
+        jdbcTemplate.update(query, sale.price());
     }
+
+
 }

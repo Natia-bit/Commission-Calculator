@@ -7,6 +7,13 @@ import java.util.List;
 public interface SaleDao {
 
     List<Sale> findAll();
-    int addSale(Sale sale);
+
+
+
+    void insertSale(Sale sale);
+
+
+//    boolean deleteSale(int id);
+
 
 }
