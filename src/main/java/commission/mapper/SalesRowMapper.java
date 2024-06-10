@@ -10,6 +10,6 @@ public class SalesRowMapper implements RowMapper<Sale> {
 
     @Override
     public Sale mapRow(ResultSet rs, int rowNum) throws SQLException {
-        return new Sale(rs.getLong(1), rs.getDouble(2));
+        return new Sale(rs.getLong(1), rs.getDouble(2), rs.getDouble(3));
     }
 }

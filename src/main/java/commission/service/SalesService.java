@@ -10,8 +10,12 @@ public interface SalesService {
      void insertSale(Sale sale);
      Optional<Sale> findSaleById(long id);
 
-     void deleteSale(long id);
-     void updateSale(long id, Sale sale);
+     boolean deleteSale(long id);
+     boolean updateSale(long id, Sale sale);
+
+    boolean updateSalePrice(long id, Sale sale);
+    boolean updateSalePercentage(long id, Sale sale);
+
 
 
 

@@ -3,6 +3,7 @@ package commission.service;
 import commission.dao.SaleDaoImpl;
 import commission.entity.Sale;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,21 +30,64 @@ public class SaleServiceImpl implements SalesService{
 
     @Override
     public Optional<Sale> findSaleById(long id) {
-        // checks & handle errors
-        return Optional.of(saleDao.findSaleById(id));
+        try {
+            return Optional.of(saleDao.findSaleById(id));
+        } catch (EmptyResultDataAccessException e) {
+            throw new RuntimeException("ID does not exists");
+        }
     }
 
-
     @Override
-    public void deleteSale(long id) {
-        // checks and handle errors
+    public boolean deleteSale(long id) {
+        boolean isDeleted = false;
+        var temp = findSaleById(id);
+        if (temp.isEmpty()){
+            System.out.println("ID does not exists");
+        } else {
             saleDao.deleteSale(id);
+            isDeleted = true;
+        }
+
+        return isDeleted;
     }
 
 
     @Override
-    public void updateSale(long id, Sale sale) {
-        // checks and handle errors
-        saleDao.updateSale(id, sale);
+    public boolean updateSale(long id, Sale sale) {
+        boolean isUpdated = false;
+        var temp = findSaleById(id);
+        if (temp.isEmpty()) {
+            System.out.println("ID does not exists");
+        } else {
+            saleDao.updateSale(id, sale);
+            isUpdated = true;
+        }
+        return isUpdated;
+    }
+
+    @Override
+    public boolean updateSalePrice(long id, Sale sale) {
+        boolean isUpdated = false;
+        var temp = findSaleById(id);
+        if (temp.isEmpty()) {
+            System.out.println("ID does not exists");
+        } else {
+            saleDao.updateSalePrice(id, sale);
+            isUpdated = true;
+        }
+        return isUpdated;
+    }
+
+    @Override
+    public boolean updateSalePercentage(long id, Sale sale) {
+        boolean isUpdated = false;
+        var temp = findSaleById(id);
+        if (temp.isEmpty()) {
+            System.out.println("ID does not exists");
+        } else {
+            saleDao.updateSalePercentage(id, sale);
+            isUpdated = true;
+        }
+        return isUpdated;
     }
 }

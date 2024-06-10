@@ -41,4 +41,15 @@ public class CommissionRestController {
     public void updateSale(@PathVariable long id, @RequestBody Sale sale){
         saleService.updateSale(id, sale);
     }
+
+    @PutMapping("/sales/price/{id}")
+    public void updateSalePrice(@PathVariable long id, @RequestBody Sale sale){
+        saleService.updateSalePrice(id, sale);
+    }
+
+    @PutMapping("/sales/percentage/{id}")
+    public void updateSalePercentage(@PathVariable long id, @RequestBody Sale sale){
+        System.out.println(sale);
+        saleService.updateSalePercentage(id, sale);
+    }
 }
