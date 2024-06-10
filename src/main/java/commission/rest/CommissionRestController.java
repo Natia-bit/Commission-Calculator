@@ -36,4 +36,9 @@ public class CommissionRestController {
     public void deleteSale(@PathVariable long id){
         saleService.deleteSale(id);
     }
+
+    @PutMapping("/sales/{id}")
+    public void updateSale(@PathVariable long id, @RequestBody Sale sale){
+        saleService.updateSale(id, sale);
+    }
 }

@@ -7,14 +7,9 @@ import java.util.List;
 public interface SaleDao {
 
     List<Sale> findAll();
-
-
-
     void insertSale(Sale sale);
     Sale findSaleById(long id);
     void deleteSale(long id);
-
-
-
+    void updateSale(long id, Sale sale);
 
 }

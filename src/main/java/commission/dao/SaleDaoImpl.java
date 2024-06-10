@@ -34,7 +34,6 @@ public class SaleDaoImpl implements SaleDao{
     @Override
     public Sale findSaleById(long id) {
         var query = "SELECT * FROM sales WHERE id=?";
-
         System.out.println(jdbcTemplate.queryForObject(query, new SalesRowMapper(), id));
         return  jdbcTemplate.queryForObject(query, new SalesRowMapper(), id);
     }
@@ -43,7 +42,13 @@ public class SaleDaoImpl implements SaleDao{
     @Override
     public void deleteSale(long id) {
         var query = "DELETE FROM sales WHERE id=?";
-        jdbcTemplate.query(query, new SalesRowMapper(), id);
+//        jdbcTemplate.query(query, new SalesRowMapper(), id);
+        jdbcTemplate.update(query, id);
     }
 
+    @Override
+    public void updateSale(long id, Sale sale) {
+        var query = "UPDATE sales SET price=? WHERE id=?";
+        jdbcTemplate.update(query, sale.price(), id);
+    }
 }

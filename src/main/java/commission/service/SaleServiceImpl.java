@@ -29,16 +29,21 @@ public class SaleServiceImpl implements SalesService{
 
     @Override
     public Optional<Sale> findSaleById(long id) {
-        // checks
+        // checks & handle errors
         return Optional.of(saleDao.findSaleById(id));
     }
 
 
     @Override
     public void deleteSale(long id) {
-        // checks
+        // checks and handle errors
             saleDao.deleteSale(id);
-            System.out.println("Deleted");
+    }
 
+
+    @Override
+    public void updateSale(long id, Sale sale) {
+        // checks and handle errors
+        saleDao.updateSale(id, sale);
     }
 }

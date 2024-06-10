@@ -11,6 +11,7 @@ public interface SalesService {
      Optional<Sale> findSaleById(long id);
 
      void deleteSale(long id);
+     void updateSale(long id, Sale sale);
 
 
 
