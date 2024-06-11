@@ -52,4 +52,5 @@ public class CommissionRestController {
         System.out.println(sale);
         saleService.updateSalePercentage(id, sale);
     }
+
 }

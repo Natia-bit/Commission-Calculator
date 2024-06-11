@@ -1,6 +1,7 @@
 package commission.service;
 
 import commission.dao.SaleDaoImpl;
+
 import commission.entity.Sale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -90,4 +91,7 @@ public class SaleServiceImpl implements SalesService{
         }
         return isUpdated;
     }
+
+
+
 }

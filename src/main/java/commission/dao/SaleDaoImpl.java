@@ -27,8 +27,8 @@ public class SaleDaoImpl implements SaleDao{
 
     @Override
     public void insertSale(Sale sale) {
-        var query = "INSERT INTO sales(price, percentage) VALUES (?,?)";
-        jdbcTemplate.update(query, sale.price(), sale.percentage());
+        var query = "INSERT INTO sales(price, percentage, commission) VALUES (?,?,?)";
+        jdbcTemplate.update(query, sale.price(), sale.percentage(), commissionPerSale(sale));
     }
 
     @Override
@@ -47,19 +47,23 @@ public class SaleDaoImpl implements SaleDao{
 
     @Override
     public void updateSale(long id, Sale sale) {
-        var query = "UPDATE sales SET price=?, percentage=?  WHERE id=?";
-        jdbcTemplate.update(query, sale.price(), sale.percentage(), id);
+        var query = "UPDATE sales SET price=?, percentage=?, commission=?  WHERE id=?";
+        jdbcTemplate.update(query, sale.price(), sale.percentage(), commissionPerSale(sale), id);
     }
 
     @Override
     public void updateSalePrice(long id, Sale sale) {
-        var query = "UPDATE sales SET price=? WHERE id=?";
-        jdbcTemplate.update(query, sale.price(), id);
+        var query = "UPDATE sales SET price=?, commission=? WHERE id=?";
+        jdbcTemplate.update(query, sale.price(), commissionPerSale(sale), id);
     }
 
     @Override
     public void updateSalePercentage(long id, Sale sale) {
-        var query = "UPDATE sales SET percentage=? WHERE id=?";
-        jdbcTemplate.update(query, sale.percentage(), id);
+        var query = "UPDATE sales SET percentage=?, commission=? WHERE id=?";
+        jdbcTemplate.update(query, sale.percentage(), commissionPerSale(sale), id);
+    }
+
+    public double commissionPerSale(Sale sale){
+       return sale.price() * sale.percentage() / 100 ;
     }
 }
