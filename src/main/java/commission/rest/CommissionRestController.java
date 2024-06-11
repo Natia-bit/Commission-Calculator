@@ -5,6 +5,7 @@ import commission.service.SaleServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -26,10 +27,9 @@ public class CommissionRestController {
         saleService.insertSale(sale);
     }
 
-
     @GetMapping("/sales/{id}")
-    public void findSaleById(@PathVariable long id){
-        saleService.findSaleById(id);
+    public Optional<Sale> findSaleById(@PathVariable long id){
+        return saleService.findSaleById(id);
     }
 
     @DeleteMapping("/sales/{id}")

@@ -1,14 +1,15 @@
 package commission.service;
 
 import commission.dao.SaleDaoImpl;
-
 import commission.entity.Sale;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
+
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Service
 public class SaleServiceImpl implements SalesService{
@@ -31,11 +32,21 @@ public class SaleServiceImpl implements SalesService{
 
     @Override
     public Optional<Sale> findSaleById(long id) {
-        try {
-            return Optional.of(saleDao.findSaleById(id));
-        } catch (EmptyResultDataAccessException e) {
-            throw new RuntimeException("ID does not exists");
+        var temp = saleDao.findSaleById(id);
+        Sale sale = null;
+        if (temp.isPresent()) {
+            sale = temp.get();
+        } else {
+            throw new ResponseStatusException(NOT_FOUND, "ID not found");
         }
+        return Optional.of(sale);
+
+//        try {
+//            var temp = saleDao.findSaleById(id);
+//            return Optional.of(temp.get());
+//        } catch (EmptyResultDataAccessException e) {
+//            throw new RuntimeException("Invalid ID");
+//        }
     }
 
     @Override

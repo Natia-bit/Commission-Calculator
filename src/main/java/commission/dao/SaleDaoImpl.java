@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class SaleDaoImpl implements SaleDao{
@@ -32,12 +33,16 @@ public class SaleDaoImpl implements SaleDao{
     }
 
     @Override
-    public Sale findSaleById(long id) {
+    public Optional<Sale> findSaleById(long id) {
         var query = "SELECT * FROM sales WHERE id=?";
-        System.out.println(jdbcTemplate.queryForObject(query, new SalesRowMapper(), id));
-        return  jdbcTemplate.queryForObject(query, new SalesRowMapper(), id);
+        return Optional.ofNullable(jdbcTemplate.queryForObject(query, new SalesRowMapper(), id));
     }
 
+    @Override
+    public Sale findById(long id) {
+        var query = "SELECT * FROM sales WHERE id=?";
+        return jdbcTemplate.queryForObject(query, new SalesRowMapper(), id);
+    }
 
     @Override
     public void deleteSale(long id) {
@@ -53,17 +58,23 @@ public class SaleDaoImpl implements SaleDao{
 
     @Override
     public void updateSalePrice(long id, Sale sale) {
+        var tempPercentage = findById(id).percentage();
         var query = "UPDATE sales SET price=?, commission=? WHERE id=?";
-        jdbcTemplate.update(query, sale.price(), commissionPerSale(sale), id);
+        jdbcTemplate.update(query, sale.price(), commissionPerSale(sale.price(), tempPercentage), id);
     }
 
     @Override
     public void updateSalePercentage(long id, Sale sale) {
+        var tempPrice = findById(id).price();
         var query = "UPDATE sales SET percentage=?, commission=? WHERE id=?";
-        jdbcTemplate.update(query, sale.percentage(), commissionPerSale(sale), id);
+        jdbcTemplate.update(query, sale.percentage(), commissionPerSale(sale.percentage(), tempPrice), id);
     }
 
     public double commissionPerSale(Sale sale){
        return sale.price() * sale.percentage() / 100 ;
+    }
+
+    public double commissionPerSale(double valueA, double valueB){
+        return valueA * valueB / 100;
     }
 }
