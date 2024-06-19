@@ -3,20 +3,20 @@ package commission.service;
 import commission.dao.SaleDao;
 import commission.dao.SaleDaoImpl;
 import commission.entity.Sale;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
-
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Service
 public class SaleServiceImpl implements SalesService{
 
     private final SaleDao saleDao;
+    private final Log logger = LogFactory.getLog(this.getClass());
 
     @Autowired
     public SaleServiceImpl(SaleDaoImpl saleDao) {
@@ -32,32 +32,23 @@ public class SaleServiceImpl implements SalesService{
         saleDao.insertSale(sale, commissionPerSale(sale));
     }
 
+
     @Override
     public Optional<Sale> findSaleById(long id) {
-        var temp = saleDao.findSaleById(id);
-        Sale sale;
-        if (temp.isPresent()) {
-            sale = temp.get();
-        } else {
-            throw new ResponseStatusException(NOT_FOUND, "ID not found");
+        try{
+            return saleDao.findSaleById(id);
+        } catch (EmptyResultDataAccessException e){
+            throw new RuntimeException("ID " +id +" not found.");
         }
-        return Optional.of(sale);
-
-//        try {
-//            var temp = saleDao.findSaleById(id);
-//            return Optional.of(temp.get());
-//        } catch (EmptyResultDataAccessException e) {
-//            throw new RuntimeException("Invalid ID");
-//        }
     }
 
 
     @Override
-    public Sale findById(long id) {
-        try {
+    public Sale findById(long id)  {
+        try{
             return saleDao.findById(id);
-        } catch (EmptyResultDataAccessException e) {
-            throw  new RuntimeException("No sale by ID: " + id);
+        } catch (EmptyResultDataAccessException e){
+            throw new RuntimeException("ID " +id +" not found.");
         }
     }
 
@@ -66,7 +57,7 @@ public class SaleServiceImpl implements SalesService{
         boolean isDeleted = false;
         var temp = findSaleById(id);
         if (temp.isEmpty()){
-            System.out.println("ID does not exists");
+            logger.error("ID not found");
         } else {
             saleDao.deleteSale(id);
             isDeleted = true;
@@ -81,7 +72,7 @@ public class SaleServiceImpl implements SalesService{
         boolean isUpdated = false;
         var temp = findSaleById(id);
         if (temp.isEmpty()) {
-            System.out.println("ID does not exists");
+            logger.error("ID not found");
         } else {
             saleDao.updateSale(id, sale, commissionPerSale(sale));
             isUpdated = true;
@@ -94,7 +85,7 @@ public class SaleServiceImpl implements SalesService{
         boolean isUpdated = false;
         var temp = findSaleById(id);
         if (temp.isEmpty()) {
-            System.out.println("ID does not exists");
+            logger.error("ID not found");
         } else {
             var currentPercentage = saleDao.findById(id).percentage();
             saleDao.updateSalePrice(id, sale, commissionPerSale(sale.price(), currentPercentage));
@@ -108,7 +99,7 @@ public class SaleServiceImpl implements SalesService{
         boolean isUpdated = false;
         var temp = findSaleById(id);
         if (temp.isEmpty()) {
-            System.out.println("ID does not exists");
+            logger.error("ID not found");
         } else {
             var currentPrice = saleDao.findById(id).price();
             saleDao.updateSalePercentage(id, sale, commissionPerSale(currentPrice, sale.percentage()) );
@@ -116,20 +107,6 @@ public class SaleServiceImpl implements SalesService{
         }
         return isUpdated;
     }
-
-//    @Override
-//    public boolean updateSalePercentage(long id, Sale sale) {
-//        boolean isUpdated = false;
-//        var temp = findById(id);
-//        if (temp == null) {
-//            System.out.println("ID does not exists");
-//        } else {
-//            var currentPrice = temp.price();
-//            saleDao.updateSalePercentage(id, sale, commissionPerSale(currentPrice, sale.percentage()) );
-//            isUpdated = true;
-//        }
-//        return isUpdated;
-//    }
 
 
     public double commissionPerSale(Sale sale){

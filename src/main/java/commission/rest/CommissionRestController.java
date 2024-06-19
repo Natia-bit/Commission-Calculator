@@ -13,6 +13,7 @@ public class CommissionRestController {
 
     private final SaleServiceImpl saleService;
 
+
     public CommissionRestController(SaleServiceImpl saleService) {
         this.saleService = saleService;
     }
@@ -32,6 +33,11 @@ public class CommissionRestController {
         return saleService.findSaleById(id);
     }
 
+    @GetMapping("/sales/id/{id}")
+    public Sale findById(@PathVariable long id){
+        return saleService.findById(id);
+    }
+
     @DeleteMapping("/sales/{id}")
     public void deleteSale(@PathVariable long id){
         saleService.deleteSale(id);
@@ -49,7 +55,6 @@ public class CommissionRestController {
 
     @PutMapping("/sales/percentage/{id}")
     public void updateSalePercentage(@PathVariable long id, @RequestBody Sale sale){
-        System.out.println(sale);
         saleService.updateSalePercentage(id, sale);
     }
 }
