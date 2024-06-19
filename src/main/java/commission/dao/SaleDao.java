@@ -7,11 +7,11 @@ import java.util.Optional;
 
 public interface SaleDao {
     List<Sale> findAll();
-    void insertSale(Sale sale);
+    void insertSale(Sale sale, double commission);
     Optional<Sale> findSaleById(long id);
     Sale findById(long id);
     void deleteSale(long id);
-    void updateSale(long id, Sale sale);
-    void updateSalePrice(long id, Sale sale);
-    void updateSalePercentage(long id, Sale sale);
+    void updateSale(long id, Sale sale, double commission);
+    void updateSalePrice(long id, Sale sale, double commission);
+    void updateSalePercentage(long id, Sale sale, double commission);
 }

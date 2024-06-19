@@ -1,8 +1,10 @@
 package commission.service;
 
+import commission.dao.SaleDao;
 import commission.dao.SaleDaoImpl;
 import commission.entity.Sale;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -14,7 +16,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @Service
 public class SaleServiceImpl implements SalesService{
 
-    private final SaleDaoImpl saleDao;
+    private final SaleDao saleDao;
 
     @Autowired
     public SaleServiceImpl(SaleDaoImpl saleDao) {
@@ -27,13 +29,13 @@ public class SaleServiceImpl implements SalesService{
     }
     @Override
     public void insertSale(Sale sale){
-        saleDao.insertSale(sale);
+        saleDao.insertSale(sale, commissionPerSale(sale));
     }
 
     @Override
     public Optional<Sale> findSaleById(long id) {
         var temp = saleDao.findSaleById(id);
-        Sale sale = null;
+        Sale sale;
         if (temp.isPresent()) {
             sale = temp.get();
         } else {
@@ -47,6 +49,16 @@ public class SaleServiceImpl implements SalesService{
 //        } catch (EmptyResultDataAccessException e) {
 //            throw new RuntimeException("Invalid ID");
 //        }
+    }
+
+
+    @Override
+    public Sale findById(long id) {
+        try {
+            return saleDao.findById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw  new RuntimeException("No sale by ID: " + id);
+        }
     }
 
     @Override
@@ -71,7 +83,7 @@ public class SaleServiceImpl implements SalesService{
         if (temp.isEmpty()) {
             System.out.println("ID does not exists");
         } else {
-            saleDao.updateSale(id, sale);
+            saleDao.updateSale(id, sale, commissionPerSale(sale));
             isUpdated = true;
         }
         return isUpdated;
@@ -84,7 +96,8 @@ public class SaleServiceImpl implements SalesService{
         if (temp.isEmpty()) {
             System.out.println("ID does not exists");
         } else {
-            saleDao.updateSalePrice(id, sale);
+            var currentPercentage = saleDao.findById(id).percentage();
+            saleDao.updateSalePrice(id, sale, commissionPerSale(sale.price(), currentPercentage));
             isUpdated = true;
         }
         return isUpdated;
@@ -97,12 +110,35 @@ public class SaleServiceImpl implements SalesService{
         if (temp.isEmpty()) {
             System.out.println("ID does not exists");
         } else {
-            saleDao.updateSalePercentage(id, sale);
+            var currentPrice = saleDao.findById(id).price();
+            saleDao.updateSalePercentage(id, sale, commissionPerSale(currentPrice, sale.percentage()) );
             isUpdated = true;
         }
         return isUpdated;
     }
 
+//    @Override
+//    public boolean updateSalePercentage(long id, Sale sale) {
+//        boolean isUpdated = false;
+//        var temp = findById(id);
+//        if (temp == null) {
+//            System.out.println("ID does not exists");
+//        } else {
+//            var currentPrice = temp.price();
+//            saleDao.updateSalePercentage(id, sale, commissionPerSale(currentPrice, sale.percentage()) );
+//            isUpdated = true;
+//        }
+//        return isUpdated;
+//    }
+
+
+    public double commissionPerSale(Sale sale){
+        return sale.price() * sale.percentage() / 100 ;
+    }
+
+    public double commissionPerSale(double valueA, double valueB){
+        return valueA * valueB / 100;
+    }
 
 
 }

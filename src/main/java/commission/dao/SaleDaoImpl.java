@@ -6,42 +6,45 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 public class SaleDaoImpl implements SaleDao{
 
-    JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
+    private final SalesRowMapper rowMapper = new SalesRowMapper();
 
     @Autowired
-    public SaleDaoImpl(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public SaleDaoImpl(DataSource dataSource) {
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
+
 
     @Override
     public List<Sale> findAll() {
         var query = "SELECT * FROM sales";
-        return jdbcTemplate.query(query, new SalesRowMapper());
+        return jdbcTemplate.query(query, rowMapper);
     }
 
 
     @Override
-    public void insertSale(Sale sale) {
+    public void insertSale(Sale sale, double commission) {
         var query = "INSERT INTO sales(price, percentage, commission) VALUES (?,?,?)";
-        jdbcTemplate.update(query, sale.price(), sale.percentage(), commissionPerSale(sale));
+        jdbcTemplate.update(query, sale.price(), sale.percentage(), commission);
     }
 
     @Override
     public Optional<Sale> findSaleById(long id) {
         var query = "SELECT * FROM sales WHERE id=?";
-        return Optional.ofNullable(jdbcTemplate.queryForObject(query, new SalesRowMapper(), id));
+        return Optional.ofNullable(jdbcTemplate.queryForObject(query, rowMapper, id));
     }
 
     @Override
     public Sale findById(long id) {
         var query = "SELECT * FROM sales WHERE id=?";
-        return jdbcTemplate.queryForObject(query, new SalesRowMapper(), id);
+        return jdbcTemplate.queryForObject(query, rowMapper, id);
     }
 
     @Override
@@ -51,30 +54,21 @@ public class SaleDaoImpl implements SaleDao{
     }
 
     @Override
-    public void updateSale(long id, Sale sale) {
+    public void updateSale(long id, Sale sale, double commission) {
         var query = "UPDATE sales SET price=?, percentage=?, commission=?  WHERE id=?";
-        jdbcTemplate.update(query, sale.price(), sale.percentage(), commissionPerSale(sale), id);
+        jdbcTemplate.update(query, sale.price(), sale.percentage(), commission, id);
     }
 
     @Override
-    public void updateSalePrice(long id, Sale sale) {
-        var tempPercentage = findById(id).percentage();
+    public void updateSalePrice(long id, Sale sale, double commission) {
         var query = "UPDATE sales SET price=?, commission=? WHERE id=?";
-        jdbcTemplate.update(query, sale.price(), commissionPerSale(sale.price(), tempPercentage), id);
+        jdbcTemplate.update(query, sale.price(), commission, id);
     }
 
     @Override
-    public void updateSalePercentage(long id, Sale sale) {
-        var tempPrice = findById(id).price();
+    public void updateSalePercentage(long id, Sale sale, double commission) {
         var query = "UPDATE sales SET percentage=?, commission=? WHERE id=?";
-        jdbcTemplate.update(query, sale.percentage(), commissionPerSale(sale.percentage(), tempPrice), id);
+        jdbcTemplate.update(query, sale.percentage(), commission, id);
     }
 
-    public double commissionPerSale(Sale sale){
-       return sale.price() * sale.percentage() / 100 ;
-    }
-
-    public double commissionPerSale(double valueA, double valueB){
-        return valueA * valueB / 100;
-    }
 }
