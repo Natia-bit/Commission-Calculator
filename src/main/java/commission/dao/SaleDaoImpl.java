@@ -41,11 +41,7 @@ public class SaleDaoImpl implements SaleDao{
         return Optional.ofNullable(jdbcTemplate.queryForObject(query, rowMapper, id));
     }
 
-    @Override
-    public Sale findById(long id) {
-        var query = "SELECT * FROM sales WHERE id=?";
-        return jdbcTemplate.queryForObject(query, rowMapper, id);
-    }
+
 
     @Override
     public void deleteSale(long id) {

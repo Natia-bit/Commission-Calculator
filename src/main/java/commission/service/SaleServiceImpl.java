@@ -46,15 +46,6 @@ public class SaleServiceImpl implements SalesService{
     }
 
 
-    @Override
-    public Sale findById(long id)  {
-        try{
-            return saleDao.findById(id);
-        } catch (EmptyResultDataAccessException e){
-            logger.error("ID " + id + " not found");
-           throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        }
-    }
 
     @Override
     public boolean deleteSale(long id) {
@@ -89,12 +80,13 @@ public class SaleServiceImpl implements SalesService{
         boolean isUpdated = false;
         var temp = findSaleById(id);
         if (temp.isEmpty()) {
-            logger.error("ID not found");
+            logger.error("ID " + id + " not found");
         } else {
-            var currentPercentage = saleDao.findById(id).percentage();
+            var currentPercentage = temp.get().percentage();
             saleDao.updateSalePrice(id, sale, commissionPerSale(sale.price(), currentPercentage));
             isUpdated = true;
         }
+
 
         return isUpdated;
     }
@@ -106,7 +98,7 @@ public class SaleServiceImpl implements SalesService{
         if (temp.isEmpty()) {
             logger.error("ID not found");
         } else {
-            var currentPrice = saleDao.findById(id).price();
+            var currentPrice = temp.get().price();
             saleDao.updateSalePercentage(id, sale, commissionPerSale(currentPrice, sale.percentage()) );
             isUpdated = true;
         }

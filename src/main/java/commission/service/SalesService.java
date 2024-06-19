@@ -9,7 +9,7 @@ public interface SalesService {
     List<Sale> findAll();
      void insertSale(Sale sale);
      Optional<Sale> findSaleById(long id);
-      Sale findById(long id);
+
      boolean deleteSale(long id);
      boolean updateSale(long id, Sale sale);
 

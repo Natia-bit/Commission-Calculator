@@ -33,10 +33,6 @@ public class CommissionRestController {
         return saleService.findSaleById(id);
     }
 
-    @GetMapping("/sales/id/{id}")
-    public Sale findById(@PathVariable long id){
-        return saleService.findById(id);
-    }
 
     @DeleteMapping("/sales/{id}")
     public void deleteSale(@PathVariable long id){
