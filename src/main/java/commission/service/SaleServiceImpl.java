@@ -46,7 +46,6 @@ public class SaleServiceImpl implements SalesService{
     }
 
 
-
     @Override
     public boolean deleteSale(long id) {
         boolean isDeleted = false;
