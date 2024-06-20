@@ -25,46 +25,47 @@ public class SaleDaoImpl implements SaleDao{
     @Override
     public List<Sale> findAll() {
         var query = "SELECT * FROM sales";
-        return jdbcTemplate.query(query, rowMapper);
+        return this.jdbcTemplate.query(query, this.rowMapper);
     }
 
 
     @Override
-    public void insertSale(Sale sale, double commission) {
+    public void insertSale(Sale sale) {
         var query = "INSERT INTO sales(price, percentage, commission) VALUES (?,?,?)";
-        jdbcTemplate.update(query, sale.price(), sale.percentage(), commission);
+        this.jdbcTemplate.update(query, sale.price(), sale.percentage(), sale.commission());
     }
 
     @Override
     public Optional<Sale> findSaleById(long id) {
         var query = "SELECT * FROM sales WHERE id=?";
-        return Optional.ofNullable(jdbcTemplate.queryForObject(query, rowMapper, id));
+        try {
+            return Optional.ofNullable(this.jdbcTemplate.queryForObject(query, this.rowMapper, id));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
-
-
 
     @Override
     public void deleteSale(long id) {
         var query = "DELETE FROM sales WHERE id=?";
-        jdbcTemplate.update(query, id);
+        this.jdbcTemplate.update(query, id);
     }
 
     @Override
-    public void updateSale(long id, Sale sale, double commission) {
+    public void updateSale(long id, Sale sale) {
         var query = "UPDATE sales SET price=?, percentage=?, commission=?  WHERE id=?";
-        jdbcTemplate.update(query, sale.price(), sale.percentage(), commission, id);
+        this.jdbcTemplate.update(query, sale.price(), sale.percentage(), sale.commission(), id);
     }
 
     @Override
-    public void updateSalePrice(long id, Sale sale, double commission) {
+    public void updateSalePrice(long id, Sale sale) {
         var query = "UPDATE sales SET price=?, commission=? WHERE id=?";
-        jdbcTemplate.update(query, sale.price(), commission, id);
+        this.jdbcTemplate.update(query, sale.price(), sale.commission(), id);
     }
 
     @Override
-    public void updateSalePercentage(long id, Sale sale, double commission) {
+    public void updateSalePercentage(long id, Sale sale) {
         var query = "UPDATE sales SET percentage=?, commission=? WHERE id=?";
-        jdbcTemplate.update(query, sale.percentage(), commission, id);
+        this.jdbcTemplate.update(query, sale.percentage(), sale.commission(), id);
     }
-
 }

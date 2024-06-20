@@ -6,7 +6,6 @@ import commission.entity.Sale;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -31,17 +30,18 @@ public class SaleServiceImpl implements SalesService{
     }
     @Override
     public void insertSale(Sale sale){
-        saleDao.insertSale(sale, commissionPerSale(sale));
+        saleDao.insertSale(sale);
+        logger.info("New sale created");
     }
 
 
     @Override
     public Optional<Sale> findSaleById(long id) {
-        try{
+        if (saleDao.findSaleById(id).isPresent()){
             return saleDao.findSaleById(id);
-        } catch (EmptyResultDataAccessException e){
-            logger.error("ID " + id + " not found");
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        } else {
+            logger.error("ID " + id + " not found.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
     }
 
@@ -50,10 +50,9 @@ public class SaleServiceImpl implements SalesService{
     public boolean deleteSale(long id) {
         boolean isDeleted = false;
         var temp = findSaleById(id);
-        if (temp.isEmpty()){
-            logger.error("ID " + id + " not found");
-        } else {
+        if(temp.isPresent()){
             saleDao.deleteSale(id);
+            logger.info("Sale ID " + id + " deleted");
             isDeleted = true;
         }
 
@@ -65,12 +64,14 @@ public class SaleServiceImpl implements SalesService{
     public boolean updateSale(long id, Sale sale) {
         boolean isUpdated = false;
         var temp = findSaleById(id);
-        if (temp.isEmpty()) {
-            logger.error("ID " + id + " not found");
-        } else {
-            saleDao.updateSale(id, sale, commissionPerSale(sale));
+
+        if(temp.isPresent()){
+            saleDao.updateSale(id, sale);
+            logger.info("Sale ID " + id + " updated");
             isUpdated = true;
+
         }
+
         return isUpdated;
     }
 
@@ -78,14 +79,12 @@ public class SaleServiceImpl implements SalesService{
     public boolean updateSalePrice(long id, Sale sale) {
         boolean isUpdated = false;
         var temp = findSaleById(id);
-        if (temp.isEmpty()) {
-            logger.error("ID " + id + " not found");
-        } else {
-            var currentPercentage = temp.get().percentage();
-            saleDao.updateSalePrice(id, sale, commissionPerSale(sale.price(), currentPercentage));
+
+        if (temp.isPresent()){
+            saleDao.updateSalePrice(id, sale);
+            logger.info("Sale ID " + id + " price updated");
             isUpdated = true;
         }
-
 
         return isUpdated;
     }
@@ -94,23 +93,12 @@ public class SaleServiceImpl implements SalesService{
     public boolean updateSalePercentage(long id, Sale sale) {
         boolean isUpdated = false;
         var temp = findSaleById(id);
-        if (temp.isEmpty()) {
-            logger.error("ID not found");
-        } else {
-            var currentPrice = temp.get().price();
-            saleDao.updateSalePercentage(id, sale, commissionPerSale(currentPrice, sale.percentage()) );
+        if (temp.isPresent()) {
+            saleDao.updateSalePercentage(id, sale);
+            logger.info("Sale ID " + id + " percentage updated");
             isUpdated = true;
         }
         return isUpdated;
-    }
-
-
-    public double commissionPerSale(Sale sale){
-        return sale.price() * sale.percentage() / 100 ;
-    }
-
-    public double commissionPerSale(double valueA, double valueB){
-        return valueA * valueB / 100;
     }
 
 
