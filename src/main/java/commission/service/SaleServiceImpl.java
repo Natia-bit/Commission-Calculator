@@ -37,8 +37,9 @@ public class SaleServiceImpl implements SalesService{
 
     @Override
     public Optional<Sale> findSaleById(long id) {
-        if (saleDao.findSaleById(id).isPresent()){
-            return saleDao.findSaleById(id);
+        var temp = saleDao.findSaleById(id);
+        if (temp.isPresent()){
+            return temp;
         } else {
             logger.error("ID " + id + " not found.");
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -64,12 +65,10 @@ public class SaleServiceImpl implements SalesService{
     public boolean updateSale(long id, Sale sale) {
         boolean isUpdated = false;
         var temp = findSaleById(id);
-
         if(temp.isPresent()){
             saleDao.updateSale(id, sale);
             logger.info("Sale ID " + id + " updated");
             isUpdated = true;
-
         }
 
         return isUpdated;
@@ -79,7 +78,6 @@ public class SaleServiceImpl implements SalesService{
     public boolean updateSalePrice(long id, Sale sale) {
         boolean isUpdated = false;
         var temp = findSaleById(id);
-
         if (temp.isPresent()){
             saleDao.updateSalePrice(id, sale);
             logger.info("Sale ID " + id + " price updated");
@@ -98,6 +96,7 @@ public class SaleServiceImpl implements SalesService{
             logger.info("Sale ID " + id + " percentage updated");
             isUpdated = true;
         }
+
         return isUpdated;
     }
 

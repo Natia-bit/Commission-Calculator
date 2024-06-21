@@ -3,6 +3,7 @@ package commission.dao;
 import commission.entity.Sale;
 import commission.mapper.SalesRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -40,7 +41,7 @@ public class SaleDaoImpl implements SaleDao{
         var query = "SELECT * FROM sales WHERE id=?";
         try {
             return Optional.ofNullable(this.jdbcTemplate.queryForObject(query, this.rowMapper, id));
-        } catch (Exception e) {
+        } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
     }
