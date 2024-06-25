@@ -13,15 +13,5 @@ public interface SalesService {
      boolean deleteSale(long id);
      boolean updateSale(long id, Sale sale);
 
-    boolean updateSalePrice(long id, Sale sale);
-    boolean updateSalePercentage(long id, Sale sale);
-
-
-
-
-
-
-
-
 
 }

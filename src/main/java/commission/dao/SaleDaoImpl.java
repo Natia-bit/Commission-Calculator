@@ -39,18 +39,16 @@ public class SaleDaoImpl implements SaleDao{
         }
     }
 
-
     @Override
     public void insert(Sale sale) {
-        var query = "INSERT INTO sales(price, percentage, commission) VALUES (?,?,?)";
-        this.jdbcTemplate.update(query, sale.price(), sale.percentage(), sale.commission());
+        var query = "INSERT INTO sales(price, person_id) VALUES (?,?)";
+        this.jdbcTemplate.update(query, sale.price(), sale.personId());
     }
-
 
     @Override
     public void update(long id, Sale sale) {
-        var query = "UPDATE sales SET price=?, percentage=?, commission=?  WHERE id=?";
-        this.jdbcTemplate.update(query, sale.price(), sale.percentage(), sale.commission(), id);
+        var query = "UPDATE sales SET price=? WHERE id=?";
+        this.jdbcTemplate.update(query, sale.price(), id);
     }
 
     @Override
@@ -59,17 +57,4 @@ public class SaleDaoImpl implements SaleDao{
         this.jdbcTemplate.update(query, id);
     }
 
-
-
-
-    public void updateSalePrice(long id, Sale sale) {
-        var query = "UPDATE sales SET price=?, commission=? WHERE id=?";
-        this.jdbcTemplate.update(query, sale.price(), sale.commission(), id);
-    }
-
-
-    public void updateSalePercentage(long id, Sale sale) {
-        var query = "UPDATE sales SET percentage=?, commission=? WHERE id=?";
-        this.jdbcTemplate.update(query, sale.percentage(), sale.commission(), id);
-    }
 }

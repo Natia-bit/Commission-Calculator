@@ -30,14 +30,14 @@ public class SaleServiceImpl implements SalesService{
     }
     @Override
     public void insertSale(Sale sale){
-        saleDao.insertSale(sale);
+        saleDao.insert(sale);
         logger.info("New sale created");
     }
 
 
     @Override
     public Optional<Sale> findSaleById(long id) {
-        var temp = saleDao.findSaleById(id);
+        var temp = saleDao.findById(id);
         if (temp.isPresent()){
             return temp;
         } else {
@@ -46,13 +46,12 @@ public class SaleServiceImpl implements SalesService{
         }
     }
 
-
     @Override
     public boolean deleteSale(long id) {
         boolean isDeleted = false;
         var temp = findSaleById(id);
         if(temp.isPresent()){
-            saleDao.deleteSale(id);
+            saleDao.delete(id);
             logger.info("Sale ID " + id + " deleted");
             isDeleted = true;
         }
@@ -60,45 +59,16 @@ public class SaleServiceImpl implements SalesService{
         return isDeleted;
     }
 
-
     @Override
     public boolean updateSale(long id, Sale sale) {
         boolean isUpdated = false;
         var temp = findSaleById(id);
         if(temp.isPresent()){
-            saleDao.updateSale(id, sale);
+            saleDao.update(id, sale);
             logger.info("Sale ID " + id + " updated");
             isUpdated = true;
         }
 
         return isUpdated;
     }
-
-    @Override
-    public boolean updateSalePrice(long id, Sale sale) {
-        boolean isUpdated = false;
-        var temp = findSaleById(id);
-        if (temp.isPresent()){
-            saleDao.updateSalePrice(id, sale);
-            logger.info("Sale ID " + id + " price updated");
-            isUpdated = true;
-        }
-
-        return isUpdated;
-    }
-
-    @Override
-    public boolean updateSalePercentage(long id, Sale sale) {
-        boolean isUpdated = false;
-        var temp = findSaleById(id);
-        if (temp.isPresent()) {
-            saleDao.updateSalePercentage(id, sale);
-            logger.info("Sale ID " + id + " percentage updated");
-            isUpdated = true;
-        }
-
-        return isUpdated;
-    }
-
-
 }
