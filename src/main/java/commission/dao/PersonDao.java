@@ -23,4 +23,5 @@ public interface PersonDao extends SalesCommissionDao<Person> {
     void delete(long id);
 
 
+
 }

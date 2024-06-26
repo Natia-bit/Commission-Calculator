@@ -39,7 +39,7 @@ public class PersonDaoImpl implements PersonDao{
 
     @Override
     public void insert(Person person) {
-        var query = "INSERT INTO people VALUES(first_name, surname) VALUES (?,?)";
+        var query = "INSERT INTO people(first_name, surname) VALUES (?,?)";
         this.jdbcTemplate.update(query, person.firstName(), person.surname());
 
     }
@@ -56,4 +56,6 @@ public class PersonDaoImpl implements PersonDao{
         var query = "DELETE FROM people WHERE id=?";
         this.jdbcTemplate.update(query, id);
     }
+
+
 }
