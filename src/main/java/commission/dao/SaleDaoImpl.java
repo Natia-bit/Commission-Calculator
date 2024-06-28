@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class SaleDaoImpl implements SaleDao{
+public class SaleDaoImpl implements SalesCommissionDao<Sale>{
 
     private final JdbcTemplate jdbcTemplate;
     private final SalesRowMapper rowMapper = new SalesRowMapper();

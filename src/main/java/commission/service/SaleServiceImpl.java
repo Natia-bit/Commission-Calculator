@@ -1,7 +1,7 @@
 package commission.service;
 
-import commission.dao.SaleDao;
 import commission.dao.SaleDaoImpl;
+import commission.dao.SalesCommissionDao;
 import commission.entity.Sale;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -14,9 +14,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class SaleServiceImpl implements SalesService{
+public class SaleServiceImpl implements SalesCommissionService<Sale> {
 
-    private final SaleDao saleDao;
+    private final SalesCommissionDao<Sale> saleDao;
     private final Log logger = LogFactory.getLog(this.getClass());
 
     @Autowired
@@ -29,14 +29,14 @@ public class SaleServiceImpl implements SalesService{
         return saleDao.findAll();
     }
     @Override
-    public void insertSale(Sale sale){
+    public void insert(Sale sale){
         saleDao.insert(sale);
         logger.info("New sale created");
     }
 
 
     @Override
-    public Optional<Sale> findSaleById(long id) {
+    public Optional<Sale> findById(long id) {
         var temp = saleDao.findById(id);
         if (temp.isPresent()){
             return temp;
@@ -47,9 +47,9 @@ public class SaleServiceImpl implements SalesService{
     }
 
     @Override
-    public boolean deleteSale(long id) {
+    public boolean delete(long id) {
         boolean isDeleted = false;
-        var temp = findSaleById(id);
+        var temp = findById(id);
         if(temp.isPresent()){
             saleDao.delete(id);
             logger.info("Sale ID " + id + " deleted");
@@ -60,9 +60,9 @@ public class SaleServiceImpl implements SalesService{
     }
 
     @Override
-    public boolean updateSale(long id, Sale sale) {
+    public boolean update(long id, Sale sale) {
         boolean isUpdated = false;
-        var temp = findSaleById(id);
+        var temp = findById(id);
         if(temp.isPresent()){
             saleDao.update(id, sale);
             logger.info("Sale ID " + id + " updated");

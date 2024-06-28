@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class PersonDaoImpl implements PersonDao{
+public class PersonDaoImpl implements SalesCommissionDao<Person>{
 
     private final JdbcTemplate jdbcTemplate;
     private final PeopleRowMapper rowMapper = new PeopleRowMapper();

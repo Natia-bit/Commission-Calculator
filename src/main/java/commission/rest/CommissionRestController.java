@@ -29,22 +29,22 @@ public class CommissionRestController {
 
     @GetMapping("/sales/{id}")
     public Optional<Sale> findSaleById(@PathVariable long id){
-        return saleService.findSaleById(id);
+        return saleService.findById(id);
     }
 
     @PostMapping("/sales")
     public void createSale(@RequestBody Sale sale){
-        saleService.insertSale(sale);
+        saleService.insert(sale);
     }
 
     @DeleteMapping("/sales/{id}")
     public void deleteSale(@PathVariable long id){
-        saleService.deleteSale(id);
+        saleService.delete(id);
     }
 
     @PutMapping("/sales/{id}")
     public void updateSale(@PathVariable long id, @RequestBody Sale sale){
-        saleService.updateSale(id, sale);
+        saleService.update(id, sale);
     }
 
     @GetMapping("/people")
@@ -61,10 +61,5 @@ public class CommissionRestController {
     public void insertPerson(@RequestBody Person person){
         personService.insert(person);
     }
-
-
-
-
-
 
 }

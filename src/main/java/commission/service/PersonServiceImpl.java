@@ -1,7 +1,6 @@
 package commission.service;
 
-import commission.dao.PersonDao;
-import commission.dao.PersonDaoImpl;
+import commission.dao.SalesCommissionDao;
 import commission.entity.Person;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -13,13 +12,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class PersonServiceImpl implements PersonService{
+public class PersonServiceImpl implements SalesCommissionService<Person>{
 
-    private final PersonDao personDao;
+    private final SalesCommissionDao<Person> personDao;
     private final Log logger = LogFactory.getLog(this.getClass());
 
 
-    public PersonServiceImpl(PersonDaoImpl personDao) {
+    public PersonServiceImpl(SalesCommissionDao<Person>  personDao) {
         this.personDao = personDao;
     }
 
