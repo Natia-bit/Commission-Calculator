@@ -1,11 +1,11 @@
 CREATE TABLE IF NOT EXISTS people (
-    id BIGINT generated always as identity PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     first_name TEXT not null,
     last_name TEXT not null
 );
 
 CREATE TABLE IF NOT EXISTS sales (
-    id BIGINT generated always as identity PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     price NUMERIC(10,2) not null,
     date_stamp TIMESTAMPTZ with TIME ZONE DEFAULT NOW(),
     person_id BIGINT not null,
@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS sales (
 );
 
 CREATE TABLE IF NOT EXISTS commission (
-    id BIGINT generated always as identity PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     commission_type text not null,
     payment NUMERIC(10,2) not null,
     sales_id BIGINT  not null,
