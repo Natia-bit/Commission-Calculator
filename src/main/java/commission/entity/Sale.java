@@ -1,9 +1,7 @@
 package commission.entity;
 
- public record Sale (long id, double price, double percentage, double commission) {
+import java.time.Instant;
 
+public record Sale (long id, double price, Instant dateStamp, long personId) {
 
-  public double commission() {
-   return this.price() * this.percentage() / 100;
-  }
  }

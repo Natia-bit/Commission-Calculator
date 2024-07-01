@@ -1,10 +1,9 @@
 package commission.service;
 
 import commission.dao.CrudDao;
-import commission.entity.Sale;
+import commission.entity.Person;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -13,34 +12,34 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class SaleServiceImpl implements CrudService<Sale> {
+public class PersonServiceImpl implements CrudService<Person> {
 
-    private final CrudDao<Sale> saleDao;
+    private final CrudDao<Person> personDao;
     private final Log logger = LogFactory.getLog(this.getClass());
 
-    @Autowired
-    public SaleServiceImpl(CrudDao<Sale> saleDao) {
-        this.saleDao = saleDao;
+
+    public PersonServiceImpl(CrudDao<Person> personDao) {
+        this.personDao = personDao;
     }
 
     @Override
-    public List<Sale> findAll(){
-        return saleDao.findAll();
-    }
-    @Override
-    public void insert(Sale sale){
-        saleDao.insert(sale);
-        logger.info("New sale created");
+    public List<Person> findAll() {
+        return personDao.findAll();
     }
 
+    @Override
+    public void insert(Person person) {
+        personDao.insert(person);
+        logger.info("New person added");
+    }
 
     @Override
-    public Optional<Sale> findById(long id) {
-        var temp = saleDao.findById(id);
+    public Optional<Person> findById(long id) {
+        var temp = personDao.findById(id);
         if (temp.isPresent()){
             return temp;
         } else {
-            logger.error("ID " + id + " not found.");
+            logger.error("ID not found");
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
     }
@@ -48,10 +47,11 @@ public class SaleServiceImpl implements CrudService<Sale> {
     @Override
     public boolean delete(long id) {
         boolean isDeleted = false;
+
         var temp = findById(id);
-        if(temp.isPresent()){
-            saleDao.delete(id);
-            logger.info("Sale ID " + id + " deleted");
+        if (temp.isPresent()){
+            personDao.delete(id);
+            logger.info("Person " + temp.get().firstName() + "deleted");
             isDeleted = true;
         }
 
@@ -59,15 +59,15 @@ public class SaleServiceImpl implements CrudService<Sale> {
     }
 
     @Override
-    public boolean update(long id, Sale sale) {
+    public boolean update(long id, Person person) {
         boolean isUpdated = false;
         var temp = findById(id);
-        if(temp.isPresent()){
-            saleDao.update(id, sale);
-            logger.info("Sale ID " + id + " updated");
+        if (temp.isPresent()){
+            personDao.update(id, person);
+            logger.info("Person updated");
             isUpdated = true;
         }
-
         return isUpdated;
     }
+
 }
