@@ -3,7 +3,7 @@ package commission.dao;
 import java.util.List;
 import java.util.Optional;
 
-public interface SalesCommissionDao<T>{
+public interface CrudDao<T>{
 
     List<T> findAll();
     Optional<T> findById(long id);

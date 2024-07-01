@@ -1,7 +1,7 @@
 package commission.service;
 
 import commission.dao.SaleDaoImpl;
-import commission.dao.SalesCommissionDao;
+import commission.dao.CrudDao;
 import commission.entity.Sale;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -14,9 +14,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class SaleServiceImpl implements SalesCommissionService<Sale> {
+public class SaleServiceImpl implements CrudService<Sale> {
 
-    private final SalesCommissionDao<Sale> saleDao;
+    private final CrudDao<Sale> saleDao;
     private final Log logger = LogFactory.getLog(this.getClass());
 
     @Autowired

@@ -62,4 +62,13 @@ public class CommissionRestController {
         personService.insert(person);
     }
 
+    @PutMapping("/people/{id}")
+    public void updatePerson(@PathVariable long id,@RequestBody Person person){
+        personService.update(id, person);
+    }
+
+    @DeleteMapping("/people/{id}")
+    public void deletePerson(@PathVariable long id){
+        personService.delete(id);
+    }
 }

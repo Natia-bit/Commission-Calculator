@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class PersonDaoImpl implements SalesCommissionDao<Person>{
+public class PersonDaoImpl implements CrudDao<Person> {
 
     private final JdbcTemplate jdbcTemplate;
     private final PeopleRowMapper rowMapper = new PeopleRowMapper();
@@ -23,13 +23,13 @@ public class PersonDaoImpl implements SalesCommissionDao<Person>{
 
     @Override
     public List<Person> findAll() {
-        var query = "SELECT * FROM people";
+        var query = "SELECT id, first_name, last_name  FROM people";
         return this.jdbcTemplate.query(query, this.rowMapper);
     }
 
     @Override
     public Optional<Person> findById(long id) {
-        var query = "SELECT * FROM people WHERE id=?";
+        var query = "SELECT id, first_name, last_name FROM people WHERE id=?";
         try {
             return Optional.ofNullable(this.jdbcTemplate.queryForObject(query, this.rowMapper, id));
         } catch (EmptyResultDataAccessException e) {
@@ -39,15 +39,15 @@ public class PersonDaoImpl implements SalesCommissionDao<Person>{
 
     @Override
     public void insert(Person person) {
-        var query = "INSERT INTO people(first_name, surname) VALUES (?,?)";
-        this.jdbcTemplate.update(query, person.firstName(), person.surname());
+        var query = "INSERT INTO people(first_name, last_name) VALUES (?,?)";
+        this.jdbcTemplate.update(query, person.firstName(), person.lastName());
 
     }
 
     @Override
     public void update(long id, Person person) {
-        var query = "UPDATE people SET first_name=?, surname=? WHERE id=?";
-        this.jdbcTemplate.update(query, person.firstName(), person.surname(), id);
+        var query = "UPDATE people SET first_name=?, last_name=? WHERE id=?";
+        this.jdbcTemplate.update(query, person.firstName(), person.lastName(), id);
 
     }
 

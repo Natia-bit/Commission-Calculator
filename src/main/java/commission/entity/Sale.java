@@ -1,7 +1,7 @@
 package commission.entity;
 
-import java.sql.Timestamp;
+import java.time.Instant;
 
-public record Sale (long id, double price, Timestamp dateStamp, long personId) {
+public record Sale (long id, double price, Instant dateStamp, long personId) {
 
  }

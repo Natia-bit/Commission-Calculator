@@ -1,6 +1,6 @@
 package commission.service;
 
-import commission.dao.SalesCommissionDao;
+import commission.dao.CrudDao;
 import commission.entity.Person;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -12,13 +12,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class PersonServiceImpl implements SalesCommissionService<Person>{
+public class PersonServiceImpl implements CrudService<Person> {
 
-    private final SalesCommissionDao<Person> personDao;
+    private final CrudDao<Person> personDao;
     private final Log logger = LogFactory.getLog(this.getClass());
 
 
-    public PersonServiceImpl(SalesCommissionDao<Person>  personDao) {
+    public PersonServiceImpl(CrudDao<Person> personDao) {
         this.personDao = personDao;
     }
 
@@ -69,6 +69,5 @@ public class PersonServiceImpl implements SalesCommissionService<Person>{
         }
         return isUpdated;
     }
-
 
 }
