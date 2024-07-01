@@ -71,4 +71,10 @@ public class CommissionRestController {
     public void deletePerson(@PathVariable long id){
         personService.delete(id);
     }
+
+
+    @PatchMapping("/people/{id}")
+    public void partialPersonUpdate(@PathVariable long id, @RequestBody Person partialPerson){
+        personService.update(id, partialPerson);
+    }
 }
