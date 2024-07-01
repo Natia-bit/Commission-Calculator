@@ -41,7 +41,6 @@ public class PersonDaoImpl implements CrudDao<Person> {
     public void insert(Person person) {
         var query = "INSERT INTO people(first_name, last_name) VALUES (?,?)";
         this.jdbcTemplate.update(query, person.firstName(), person.lastName());
-
     }
 
     @Override
@@ -56,6 +55,8 @@ public class PersonDaoImpl implements CrudDao<Person> {
         var query = "DELETE FROM people WHERE id=?";
         this.jdbcTemplate.update(query, id);
     }
+
+
 
 
 }
