@@ -1,6 +1,6 @@
 package commission.entity;
 
-public enum Type {
+public enum CommissionType {
     STRAIGHT,
     TIERED,
     GROSS_MARGIN

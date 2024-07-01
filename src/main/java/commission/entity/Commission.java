@@ -1,5 +1,5 @@
 package commission.entity;
 
-public record Commission(long id, Type type, double payment, long salesId ) {
+public record Commission(long id, CommissionType type, double payment, long salesId ) {
 
 }
