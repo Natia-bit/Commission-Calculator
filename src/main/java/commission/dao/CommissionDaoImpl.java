@@ -23,13 +23,13 @@ public class CommissionDaoImpl implements  CrudDao<Commission> {
 
     @Override
     public List<Commission> findAll() {
-        var query = "SELECT id, type, payment, sales_id FROM commission";
+        var query = "SELECT id, commission_type, payment, sales_id FROM commission";
         return this.jdbcTemplate.query(query, this.rowMapper);
     }
 
     @Override
     public Optional<Commission> findById(long id) {
-        var query = "SELECT id, type, payment, sales_id FROM commission WHERE id=?";
+        var query = "SELECT id, commission_type, payment, sales_id FROM commission WHERE id=?";
         try {
             return Optional.ofNullable(this.jdbcTemplate.queryForObject(query, this.rowMapper, id));
         } catch (EmptyResultDataAccessException e) {
@@ -39,20 +39,21 @@ public class CommissionDaoImpl implements  CrudDao<Commission> {
 
     @Override
     public void insert(Commission commission) {
-        var query =  "INSERT INTO commission(type) VALUES (?)";
-        this.jdbcTemplate.update(query,commission.type());
+        var query =  "INSERT INTO commission(commission_type, sales_id) VALUES (?,?)";
+//        var query =  "INSERT INTO commission(commission_type, sales_id) VALUES (CAST(? AS commission_type),?)";
+        this.jdbcTemplate.update(query, commission.commissionType().toString(), commission.salesId());
     }
 
     @Override
     public void update(long id, Commission commission) {
         var query = "UPDATE commission SET type=? WHERE id=?";
-        this.jdbcTemplate.update(query, commission.type(), id);
+        this.jdbcTemplate.update(query, commission.commissionType(), id);
     }
 
     @Override
     public void delete(long id) {
         var query = "DELETE FROM commission WHERE id=?";
         this.jdbcTemplate.update(query, id);
-
     }
+
 }

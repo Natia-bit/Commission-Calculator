@@ -26,12 +26,13 @@ public class SaleDaoImpl implements CrudDao<Sale> {
     @Override
     public List<Sale> findAll() {
         var query = "SELECT * FROM sales";
+//        var query = "SELECT id, price, date_stamp, person_id FROM sales";
         return this.jdbcTemplate.query(query, this.rowMapper);
     }
 
     @Override
     public Optional<Sale> findById(long id) {
-        var query = "SELECT * FROM sales WHERE id=?";
+        var query = "SELECT id, price, date_stamp, person_id FROM sales WHERE id=?";
         try {
             return Optional.ofNullable(this.jdbcTemplate.queryForObject(query, this.rowMapper, id));
         } catch (EmptyResultDataAccessException e) {

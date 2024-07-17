@@ -5,7 +5,6 @@ import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.Instant;
 
 public class SalesRowMapper implements RowMapper<Sale> {
 
@@ -14,7 +13,7 @@ public class SalesRowMapper implements RowMapper<Sale> {
         return new Sale(
                 rs.getLong(1),
                 rs.getDouble(2),
-                rs.getObject(3, Instant.class),
+                rs.getObject(3, java.time.OffsetDateTime.class),
                 rs.getLong(4)
         );
     }

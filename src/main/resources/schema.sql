@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS people (
 CREATE TABLE IF NOT EXISTS sales (
     id BIGSERIAL PRIMARY KEY,
     price NUMERIC(10,2) not null,
-    date_stamp TIMESTAMPTZ with TIME ZONE DEFAULT NOW(),
+    date_stamp TIMESTAMPTZ DEFAULT NOW(),
     person_id BIGINT not null,
     FOREIGN key (person_id) references people(id)
     on delete set null

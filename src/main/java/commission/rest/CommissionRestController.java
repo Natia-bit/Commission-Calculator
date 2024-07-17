@@ -1,7 +1,9 @@
 package commission.rest;
 
+import commission.entity.Commission;
 import commission.entity.Person;
 import commission.entity.Sale;
+import commission.service.CommissionServiceImpl;
 import commission.service.PersonServiceImpl;
 import commission.service.SaleServiceImpl;
 import org.springframework.web.bind.annotation.*;
@@ -12,14 +14,15 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api")
 public class CommissionRestController {
-
-    private final SaleServiceImpl saleService;
     private final PersonServiceImpl personService;
+    private final SaleServiceImpl saleService;
+    private final CommissionServiceImpl commissionService;
 
 
-    public CommissionRestController(SaleServiceImpl saleService, PersonServiceImpl personService) {
-        this.saleService = saleService;
+    public CommissionRestController(PersonServiceImpl personService, SaleServiceImpl saleService, CommissionServiceImpl commissionService) {
         this.personService = personService;
+        this.saleService = saleService;
+        this.commissionService = commissionService;
     }
 
     @GetMapping("/sales")
@@ -76,5 +79,11 @@ public class CommissionRestController {
     @PatchMapping("/people/{id}")
     public void partialPersonUpdate(@PathVariable long id, @RequestBody Person partialPerson){
         personService.update(id, partialPerson);
+    }
+
+
+    @PostMapping("/commission")
+    public void addCommission(@RequestBody Commission commission){
+        commissionService.insert(commission);
     }
 }

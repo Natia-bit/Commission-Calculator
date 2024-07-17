@@ -1,7 +1,5 @@
 package commission.entity;
 
-import java.time.Instant;
-
-public record Sale (long id, double price, Instant dateStamp, long personId) {
+public record Sale (long id, double price, java.time.OffsetDateTime dateStamp, long personId) {
 
  }
