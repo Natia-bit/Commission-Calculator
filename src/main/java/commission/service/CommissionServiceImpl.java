@@ -34,12 +34,25 @@ public class CommissionServiceImpl implements CrudService<Commission> {
 
     @Override
     public Optional<Commission> findById(long id) {
+        var temp = commissionDao.findById(id);
+        if (temp.isPresent()){
+            return  temp;
+        } else {
+            logger.error("ID " + id + " not found.");
+        }
         return Optional.empty();
     }
 
     @Override
     public boolean delete(long id) {
-        return false;
+        boolean isDeleted = false;
+        var temp = findById(id);
+        if (temp.isPresent()){
+            commissionDao.delete(id);
+            logger.info("Commission ID " + id + " deleted");
+            isDeleted = true;
+        }
+        return isDeleted;
     }
 
     @Override

@@ -39,8 +39,8 @@ public class CommissionDaoImpl implements  CrudDao<Commission> {
 
     @Override
     public void insert(Commission commission) {
-        var query =  "INSERT INTO commission(id, commission_type, payment, sales_id) VALUES (?,?,?,?)";
-        this.jdbcTemplate.update(query, commission.id(), commission.commissionType().toString(), commission.payment(), commission.salesId());
+        var query =  "INSERT INTO commission(commission_type, payment, sales_id) VALUES (?,?,?)";
+        this.jdbcTemplate.update(query, commission.commissionType().toString(), commission.payment(), commission.salesId());
     }
 
     @Override
