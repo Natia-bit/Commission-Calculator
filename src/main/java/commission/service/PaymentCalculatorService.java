@@ -42,11 +42,11 @@ public class PaymentCalculatorService {
                 payment = price * percentage / 100;
             }
             case GROSS_MARGIN -> {
-                payment =  ((price * margin ) / 100 ) * 10;
+                payment =  (((price * margin ) / 100 ) * 10)/100;
             }
             case TIERED -> {
                 if (price <= 1000){
-                    payment =   price * 10 / 100;
+                    payment =   (price * 10) / 100;
                 } else if (price >= 5000 && price <10000){
                     payment = price * 15 / 100;
                 } else if (price > 10000){
