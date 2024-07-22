@@ -4,6 +4,7 @@ import commission.entity.Commission;
 import commission.entity.Person;
 import commission.entity.Sale;
 import commission.service.CommissionServiceImpl;
+import commission.service.PaymentCalculatorService;
 import commission.service.PersonServiceImpl;
 import commission.service.SaleServiceImpl;
 import org.springframework.web.bind.annotation.*;
@@ -17,12 +18,17 @@ public class CommissionRestController {
     private final PersonServiceImpl personService;
     private final SaleServiceImpl saleService;
     private final CommissionServiceImpl commissionService;
+    private final PaymentCalculatorService paymentCalculatorService;
 
 
-    public CommissionRestController(PersonServiceImpl personService, SaleServiceImpl saleService, CommissionServiceImpl commissionService) {
+    public CommissionRestController(PersonServiceImpl personService,
+                                    SaleServiceImpl saleService,
+                                    CommissionServiceImpl commissionService,
+                                    PaymentCalculatorService paymentCalculatorService) {
         this.personService = personService;
         this.saleService = saleService;
         this.commissionService = commissionService;
+        this.paymentCalculatorService = paymentCalculatorService;
     }
 
     @GetMapping("/sales")
@@ -84,6 +90,6 @@ public class CommissionRestController {
 
     @PostMapping("/commission")
     public void addCommission(@RequestBody Commission commission){
-        commissionService.insert(commission);
+       paymentCalculatorService.completeCommission(commission);
     }
 }
