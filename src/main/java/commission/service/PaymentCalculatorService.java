@@ -19,7 +19,6 @@ public class PaymentCalculatorService {
     }
 
     public void completeCommission(Commission commission){
-        Optional<Sale> sale = this.saleDao.findById(commission.salesId());
         Commission completeCommission = new Commission(
                 commission.id(),
                 commission.commissionType(),
@@ -32,7 +31,6 @@ public class PaymentCalculatorService {
     public double calculateCommissionPayment(Commission commission){
         Optional<Sale> sale = this.saleDao.findById(commission.salesId());
         var price = sale.get().price();
-        System.out.println(price);
         double payment = 1;
         var percentage = 10;
         var margin = 10;
