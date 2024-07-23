@@ -33,16 +33,15 @@ public class SaleServiceImpl implements CrudService<Sale> {
         logger.info("New sale created");
     }
 
-
     @Override
     public Optional<Sale> findById(long id) {
         var temp = saleDao.findById(id);
-        if (temp.isPresent()){
-            return temp;
-        } else {
+        if (temp.isEmpty()){
             logger.error("ID " + id + " not found.");
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
+
+        return temp;
     }
 
     @Override

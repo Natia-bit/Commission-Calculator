@@ -3,10 +3,7 @@ package commission.rest;
 import commission.entity.Commission;
 import commission.entity.Person;
 import commission.entity.Sale;
-import commission.service.CommissionServiceImpl;
-import commission.service.PaymentCalculatorService;
-import commission.service.PersonServiceImpl;
-import commission.service.SaleServiceImpl;
+import commission.service.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,9 +12,9 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api")
 public class CommissionRestController {
-    private final PersonServiceImpl personService;
-    private final SaleServiceImpl saleService;
-    private final CommissionServiceImpl commissionService;
+    private final CrudService<Person> personService;
+    private final CrudService<Sale> saleService;
+    private final CrudService<Commission> commissionService;
     private final PaymentCalculatorService paymentCalculatorService;
 
 

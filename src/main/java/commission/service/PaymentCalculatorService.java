@@ -38,12 +38,10 @@ public class PaymentCalculatorService {
         var margin = 10;
 
         switch (commission.commissionType()){
-            case STRAIGHT -> {
+            case STRAIGHT ->
                 payment = price * percentage / 100;
-            }
-            case GROSS_MARGIN -> {
+            case GROSS_MARGIN ->
                 payment =  (((price * margin ) / 100 ) * 10)/100;
-            }
             case TIERED -> {
                 if (price <= 1000){
                     payment =   (price * 10) / 100;

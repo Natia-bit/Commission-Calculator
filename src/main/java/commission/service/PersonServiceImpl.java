@@ -36,18 +36,17 @@ public class PersonServiceImpl implements CrudService<Person> {
     @Override
     public Optional<Person> findById(long id) {
         var temp = personDao.findById(id);
-        if (temp.isPresent()){
-            return temp;
-        } else {
+        if (temp.isEmpty()){
             logger.error("ID not found");
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
+
+        return temp;
     }
 
     @Override
     public boolean delete(long id) {
         boolean isDeleted = false;
-
         var temp = findById(id);
         if (temp.isPresent()){
             personDao.delete(id);

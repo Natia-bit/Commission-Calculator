@@ -35,12 +35,10 @@ public class CommissionServiceImpl implements CrudService<Commission> {
     @Override
     public Optional<Commission> findById(long id) {
         var temp = commissionDao.findById(id);
-        if (temp.isPresent()){
-            return  temp;
-        } else {
+        if(temp.isEmpty()){
             logger.error("ID " + id + " not found.");
         }
-        return Optional.empty();
+        return temp;
     }
 
     @Override
