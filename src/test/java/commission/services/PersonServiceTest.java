@@ -42,7 +42,7 @@ public class PersonServiceTest {
     }
 
     @Test
-    void whenSearchingForAll_findAll_ThenReturnAll(){
+    void whenSearchingForAll_findAll_thenReturnAll(){
         List<Person> expected  = new ArrayList<>();
         expected.add(new Person(1, "Luffy", "D Monkey"));
         expected.add(new Person(1, "Zorro", "Roronoa"));
@@ -56,14 +56,14 @@ public class PersonServiceTest {
     }
 
     @Test
-    public void whenAddingNewPerson_Insert_ThenReturnNewPerson(){
+    public void whenAddingNewPerson_insert_thenReturnNewPerson(){
         Person person = new Person(100, "Levi", "Ackerman");
         personService.insert(person);
         verify(personDao, times(1)).insert(person);
     }
 
     @Test
-    public void whenSearchingWithValidId_FindById_ThenRerunTheResult(){
+    public void whenSearchingWithValidId_findById_thenRerunTheResult(){
         var result = personService.findById(2);
 
         assertTrue(result.isPresent());
@@ -76,34 +76,34 @@ public class PersonServiceTest {
 
 
     @Test
-    public void whenSearchingAnInvalidId_FindById_thenRerunErrorThrown(){
+    public void whenSearchingAnInvalidId_findById_thenRerunErrorThrown(){
         assertThrows(ResponseStatusException.class, () -> personService.findById(1));
         verify(personDao, times(1)).findById(1);
     }
 
     @Test
-    public void whenSearchingAnInvalidId_FindById_thenRerunCustomError(){
+    public void whenSearchingAnInvalidId_findById_thenRerunCustomError(){
         when(personDao.findById(1)).thenThrow(new RuntimeException("DB doesn't work"));
         assertThrows(RuntimeException.class, () -> personService.findById(1));
         verify(personDao, times(1)).findById(1);
     }
 
     @Test
-    public void whenDeletingWithId_Delete_ThenReturnTrue(){
+    public void whenDeletingWithId_delete_thenReturnTrue(){
         var result = personService.delete(2);
         assertTrue(result);
         verify(personDao, times(1)).delete(2);
     }
 
     @Test
-    public void whenDeletingWithInvalidId_Delete_ThenReturnError(){
+    public void whenDeletingWithInvalidId_delete_thenReturnError(){
         personDao.delete(1);
         assertThrows(ResponseStatusException.class, () -> personService.delete(1));
         verify(personDao, times(1)).delete(1);
     }
 
     @Test
-    public void whenUpdatingPersonById_Update_ThenReturnWithNewName(){
+    public void whenUpdatingPersonById_update_thenReturnWithUpdatedName(){
         var newData = new Person(3, "Nico", "Robin");
         personService.update(3, newData);
 
@@ -115,7 +115,7 @@ public class PersonServiceTest {
     }
 
     @Test
-    public void whenUpdatingWithInvalidId_Update_ThenReturnError(){
+    public void whenUpdatingWithInvalidId_update_thenReturnError(){
         var newData = new Person(1, "Nico", "Robin");
 
         personDao.update(1,newData);
@@ -123,5 +123,4 @@ public class PersonServiceTest {
         assertThrows(ResponseStatusException.class, () -> personService.update(1,newData));
         verify(personDao, times(1)).update(1, newData);
     }
-
 }
