@@ -52,7 +52,7 @@ public class PersonServiceImpl implements CrudService<Person> {
         var temp = findById(id);
         if (temp.isPresent()){
             personDao.delete(id);
-            logger.info("Person " + temp.get().firstName() + "deleted");
+            logger.info("Person " + temp.get().firstName() + " deleted");
             isDeleted = true;
         }
 
