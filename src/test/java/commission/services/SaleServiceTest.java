@@ -13,8 +13,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -34,20 +33,21 @@ public class SaleServiceTest {
 
     @BeforeEach
     public void setUp(){
+
+        var timeOne = OffsetDateTime.of(
+                LocalDate.of(2024, Month.JULY, 22),
+                LocalTime.of(13, 36),
+                ZoneOffset.of("2")
+        );
+
         when(saleDao.findById(1)).thenReturn(Optional.empty());
         when(saleDao.findById(2)).thenReturn(Optional.of(
-                new Sale(
-                        2,
-                        200,
-                        OffsetDateTime.parse("2024-07-22 13:36:48.401+0200",  DateTimeFormatter.ofPattern ( "yyyy-MM-dd HH:mm:ss.SSSX" )),
-                        12)));
+                new Sale(2, 200, timeOne, 12)));
         when(saleDao.findById(3)).thenReturn(Optional.of(
-                new Sale(
-                        3,
-                        300,
-                        OffsetDateTime.parse("2024-09-22 15:36:48.401+0200", DateTimeFormatter.ofPattern ( "yyyy-MM-dd HH:mm:ss.SSSX" )),
-                        13)));
+                new Sale(3, 300, OffsetDateTime.parse("2024-09-22T15:36:48.401+0200"), 13)));
+
     }
+
 
     @AfterEach
     public void tearDown(){
@@ -55,24 +55,13 @@ public class SaleServiceTest {
     }
 
     @Test
-    public void whenSearchingForAllSales_findAll_thenReturnAll(){
+    public void givenFindAll_whenDaoReturnsMultipleRecords_thenReturnMultipleRecords(){
         List<Sale> expected = new ArrayList<>();
 
-        expected.add(new Sale(
-                1,
-                100,
-                OffsetDateTime.parse("2024-08-18 14:27:15.103+0200", DateTimeFormatter.ofPattern ( "yyyy-MM-dd HH:mm:ss.SSSX" )),
-                1));
+        expected.add(new Sale(1, 100, OffsetDateTime.parse("2024-08-18T14:27:15.103+0200"), 1));
 
-        expected.add(new Sale(
-                2,
-                200,
-                OffsetDateTime.parse("2024-07-20 12:00:00.000+0200", DateTimeFormatter.ofPattern ( "yyyy-MM-dd HH:mm:ss.SSSX" )),
-                2));
-        expected.add(new Sale(3,
-                300,
-                OffsetDateTime.parse("2024-07-30 13:00:00.000+0200", DateTimeFormatter.ofPattern ( "yyyy-MM-dd HH:mm:ss.SSSX" )),
-                3));
+        expected.add(new Sale(2, 200, OffsetDateTime.parse("2024-07-20T12:00:00.000+0200"), 2));
+        expected.add(new Sale(3, 300, OffsetDateTime.parse("2024-07-30T13:00:00.000+0200"), 3));
 
         when(saleDao.findAll()).thenReturn(expected);
         var actual =  saleDao.findAll();
@@ -82,12 +71,8 @@ public class SaleServiceTest {
     }
 
     @Test
-    public void whenAddingNewSale_insert_thenReturnNewSale(){
-        Sale sale = new Sale(
-                4,
-                400,
-                OffsetDateTime.parse("2024-04-10 09:00:00.000+0200", DateTimeFormatter.ofPattern ( "yyyy-MM-dd HH:mm:ss.SSSX" )),
-                1);
+    public void givenInsert_whenDaoInsertNewRecord_thenReturnNewRecord(){
+        Sale sale = new Sale(4, 400, OffsetDateTime.parse("2024-04-10 09:00:00.000+0200"), 1);
 
         saleService.insert(sale);
         verify(saleDao, times(1)).insert(sale);
@@ -95,7 +80,7 @@ public class SaleServiceTest {
 
 
     @Test
-    public void whenSearchingForSaleWithId_findById_thenReturnResult(){
+    public void givenFindById_whenDaoSearchWithId_thenReturnRecordOfThatId(){
         var result = saleService.findById(2);
 
         assertTrue(result.isPresent());
@@ -107,48 +92,35 @@ public class SaleServiceTest {
     }
 
     @Test
-    public void whenSearchingForSaleWithInvalidID_findById_thenReturnError(){
+    public void givenFindById_whenDaoSearchWithInvalidId_thenReturnError(){
         assertThrows(ResponseStatusException.class, () -> saleService.findById(1));
         verify(saleDao, times(1)).findById(1);
     }
 
     @Test
-    public void  whenDeletingUsingId_delete_thenReturnTrue(){
+    public void givenDelete_whenDaoDeleteRecord_thenReturnTrue(){
         assertTrue(saleService.delete(2));
         verify(saleDao, times(1)).delete(2);
     }
 
     @Test
-    public void whenDeletingUsingInvalidId_delete_thenReturnError(){
+    public void givenDelete_whenDaoDeleteRecordWithInvalidId_thenReturnError(){
         saleDao.delete(1);
         assertThrows(ResponseStatusException.class, () -> saleService.delete(1));
         verify(saleDao, times(1)).delete(1);
     }
 
     @Test
-    public void whenUpdatingSale_update_thenReturnWithUpdatedSale(){
-        var newSaleData = new Sale(
-                3,
-                3199,
-                OffsetDateTime.parse("2024-08-18 14:27:15.103+0200", DateTimeFormatter.ofPattern ( "yyyy-MM-dd HH:mm:ss.SSSX" )),
-                13);
+    public void givenUpdate_whenDaoUpdateRecord_thenReturnUpdatedRecord(){
+        var newSaleData = new Sale(3, 3199, OffsetDateTime.parse("2024-08-18 14:27:15.103+0200"), 13);
 
         saleService.update(3, newSaleData);
-
-        assertEquals(3, newSaleData.id());
-        assertEquals(3199, newSaleData.price());
-        assertEquals(13, newSaleData.personId());
-
         verify(saleDao, times(1)).update(3, newSaleData);
     }
 
     @Test
-    public void whenUpdatingSaleWithInvalidId_update_thenReturnError(){
-        var newSaleData = new Sale(
-                1,
-                3000000,
-                OffsetDateTime.parse("2024-08-18 14:27:15.103+0200", DateTimeFormatter.ofPattern ( "yyyy-MM-dd HH:mm:ss.SSSX" )),
-                11);
+    public void givenUpdate_whenDaoUpdatePersonWithInvalidId_thenReturnError(){
+        var newSaleData = new Sale(1, 3000000, OffsetDateTime.parse("2024-08-18 14:27:15.103+0200"), 11);
 
         saleDao.update(1, newSaleData);
 
