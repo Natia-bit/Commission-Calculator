@@ -33,19 +33,10 @@ public class SaleServiceTest {
 
     @BeforeEach
     public void setUp(){
-
-        var timeOne = OffsetDateTime.of(
-                LocalDate.of(2024, Month.JULY, 22),
-                LocalTime.of(13, 36),
-                ZoneOffset.of("2")
-        );
-
         when(saleDao.findById(1)).thenReturn(Optional.empty());
-        when(saleDao.findById(2)).thenReturn(Optional.of(
-                new Sale(2, 200, timeOne, 12)));
-        when(saleDao.findById(3)).thenReturn(Optional.of(
-                new Sale(3, 300, OffsetDateTime.parse("2024-09-22T15:36:48.401+0200"), 13)));
-
+        when(saleDao.findById(2)).thenReturn(Optional.of(new Sale(2, 200,OffsetDateTime.parse("2024-01-10T10:15:30+02:00") , 12)));
+        when(saleDao.findById(3)).thenReturn(Optional.of(new Sale(3, 100, OffsetDateTime.parse("2024-02-03T10:15:30+02:00"), 12)));
+        when(saleDao.findById(3)).thenReturn(Optional.of(new Sale(4, 300, OffsetDateTime.parse("2024-03-22T15:36:48+02:00"), 13)));
     }
 
 
@@ -58,10 +49,9 @@ public class SaleServiceTest {
     public void givenFindAll_whenDaoReturnsMultipleRecords_thenReturnMultipleRecords(){
         List<Sale> expected = new ArrayList<>();
 
-        expected.add(new Sale(1, 100, OffsetDateTime.parse("2024-08-18T14:27:15.103+0200"), 1));
-
-        expected.add(new Sale(2, 200, OffsetDateTime.parse("2024-07-20T12:00:00.000+0200"), 2));
-        expected.add(new Sale(3, 300, OffsetDateTime.parse("2024-07-30T13:00:00.000+0200"), 3));
+        expected.add(new Sale(1, 100, OffsetDateTime.parse("2024-01-10T10:15:30+02:00"), 1));
+        expected.add(new Sale(2, 200, OffsetDateTime.parse("2024-02-20T10:20:30+02:00"), 2));
+        expected.add(new Sale(3, 300, OffsetDateTime.parse("2024-03-03T12:30:00+02:00"), 3));
 
         when(saleDao.findAll()).thenReturn(expected);
         var actual =  saleDao.findAll();
@@ -72,7 +62,7 @@ public class SaleServiceTest {
 
     @Test
     public void givenInsert_whenDaoInsertNewRecord_thenReturnNewRecord(){
-        Sale sale = new Sale(4, 400, OffsetDateTime.parse("2024-04-10 09:00:00.000+0200"), 1);
+        Sale sale = new Sale(4, 400, OffsetDateTime.parse("2024-04-12T12:30:00+02:00"), 1);
 
         saleService.insert(sale);
         verify(saleDao, times(1)).insert(sale);
@@ -112,7 +102,7 @@ public class SaleServiceTest {
 
     @Test
     public void givenUpdate_whenDaoUpdateRecord_thenReturnUpdatedRecord(){
-        var newSaleData = new Sale(3, 3199, OffsetDateTime.parse("2024-08-18 14:27:15.103+0200"), 13);
+        var newSaleData = new Sale(3, 3199, OffsetDateTime.parse("2024-08-18T14:27:15+02:00"), 13);
 
         saleService.update(3, newSaleData);
         verify(saleDao, times(1)).update(3, newSaleData);
@@ -120,7 +110,7 @@ public class SaleServiceTest {
 
     @Test
     public void givenUpdate_whenDaoUpdatePersonWithInvalidId_thenReturnError(){
-        var newSaleData = new Sale(1, 3000000, OffsetDateTime.parse("2024-08-18 14:27:15.103+0200"), 11);
+        var newSaleData = new Sale(1, 3000000, OffsetDateTime.parse("2024-08-18T14:27:10+02:00"), 11);
 
         saleDao.update(1, newSaleData);
 
