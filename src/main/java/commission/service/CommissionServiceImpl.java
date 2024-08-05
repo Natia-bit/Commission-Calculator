@@ -5,7 +5,9 @@ import commission.entity.Commission;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +39,7 @@ public class CommissionServiceImpl implements CrudService<Commission> {
         var temp = commissionDao.findById(id);
         if(temp.isEmpty()){
             logger.error("ID " + id + " not found.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
         return temp;
     }
@@ -55,7 +58,16 @@ public class CommissionServiceImpl implements CrudService<Commission> {
 
     @Override
     public boolean update(long id, Commission commission) {
-        return false;
+        var isUpdated = false;
+
+        var temp = findById(id);
+        if(temp.isPresent()){
+            commissionDao.update(id, commission);
+            logger.info("Commission ID: " + id + " updated");
+            isUpdated = true;
+        }
+
+        return isUpdated;
     }
 
 }

@@ -30,7 +30,6 @@ public class SaleServiceTest {
     @InjectMocks
     private SaleServiceImpl saleService;
 
-
     @BeforeEach
     public void setUp(){
         when(saleDao.findById(1)).thenReturn(Optional.empty());
