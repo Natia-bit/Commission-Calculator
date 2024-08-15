@@ -25,8 +25,7 @@ public class SaleDaoImpl implements CrudDao<Sale> {
 
     @Override
     public List<Sale> findAll() {
-        var query = "SELECT * FROM sales";
-//        var query = "SELECT id, price, date_stamp, person_id FROM sales";
+        var query = "SELECT id, price, date_stamp, person_id FROM sales";
         return this.jdbcTemplate.query(query, this.rowMapper);
     }
 
