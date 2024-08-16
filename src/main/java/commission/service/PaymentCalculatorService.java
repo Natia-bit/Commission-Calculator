@@ -43,7 +43,7 @@ public class PaymentCalculatorService {
 
 
         if (price == 0){
-            throw new ArithmeticException("Price cannot be 0");
+            throw new IllegalArgumentException("Price cannot be 0");
         } else {
             switch (commission.commissionType()){
                 case STRAIGHT ->
